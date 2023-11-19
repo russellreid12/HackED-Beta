@@ -5,8 +5,8 @@ credits: Victor Kwok, Russel Reid
 
 import PIL as Image
 import numpy as np 
-import pygame
-pygame.init()
+#import pygame
+#pygame.init()
 #pygame.display.set_mode((500, 500)) 
 
 class Board:
@@ -15,10 +15,10 @@ class Board:
     self.board = [[self.blank]*8]*8
     self.CurrentPlayer = 'w'
     self.gameOver = False
-
-    self.checkMate = False
-    self.inCheck = {"w":False, "b":False}
     self.moveHistory = []
+
+    #self.checkMate = False
+    #self.inCheck = {"w":False, "b":False}
 
   def __str__(self):
     #convert code representation of pieces into unicode chess pieces
@@ -46,6 +46,14 @@ class Board:
     self.board[1] = ['Pw']*8
     self.board[0] = ['Rw','Nw','Bw','Qw','Kw','Bw','Nw','Rw']
 
+    #for i in range(2,7): self.board[i] = [self.blank]*8
+
+  def history(self, s=''):
+    if len(s) == 0:
+      return "Moves Made: " + str(self.moveHistory)
+    else:
+      self.moveHistory.append(s)
+
   def inputToCoordinates(self,move):
     b=(ord(move[0].lower())-97) 
     a=int(move[1])-1
@@ -66,9 +74,85 @@ class Board:
     #check piece colour
     color = self.board[a][b][1]
     if color != self.CurrentPlayer: return False
-    selectedPiece = self.board[a][b][0]
 
+    selectedPiece = self.board[a][b][0]
+    #check if the move is a possible move for the piece selected
+    if selectedPiece == 'Q':
+      if [c,d] not in self.RookMoves(a,b,color)+self.BishopMoves(a,b,color): return False
+    if selectedPiece == 'R':
+      if [c,d] not in self.RookMoves(a,b,color): return False
+    if selectedPiece == 'B':
+      if [c,d] not in self.BishopMoves(a,b,color): return False
     return True
+  
+  def checkSquare(self,c,d,color):
+    append, stop = False,True
+    if self.board[c][d] == self.blank:
+      append = True
+      stop = False
+    elif self.board[c][d][1] != color:
+      append = True
+    return append, stop
+  
+  def BishopMoves(self,a,b,color):
+    movesList = []
+    #check the 4 sightlines (a:rows,b:columns)
+    #north east
+    for i in range(1,9-a):
+      if a+i<8 and b+i<8:
+        append, stop = self.checkSquare(a+i,b+i,color)
+        if append: movesList.append([a+i,b+i])
+        if stop: break
+    #north west
+    for i in range(1,9-a):
+      if a+i<8 and b-i>=0:
+        append, stop = self.checkSquare(a+i,b-i,color)
+        if append: movesList.append([a+i,b-i])
+        if stop: break
+    #south east
+    for i in range(1,a+1):
+      if a-i>=0 and b+i<8:
+        append, stop = self.checkSquare(a-i,b+i,color)
+        if append: movesList.append([a-i,b+i])
+        if stop: break
+    #south west
+    for i in range(1,a+1):
+      if a-i>=0 and b-i>=0:
+        append, stop = self.checkSquare(a-i,b-i,color)
+        if append: movesList.append([a-i,b-i])
+        if stop: break
+
+    return movesList
+    
+  def RookMoves(self,a,b,color):
+    movesList = []
+    #check the 4 sightlines (a:rows,b:columns)
+    #up
+    if a<7:
+      for i in range(a+1,8):
+        append, stop = self.checkSquare(i,b,color)
+        if append: movesList.append([i,b])
+        if stop: break
+    #down
+    if a>0:
+      for i in range(a-1,-1,-1):
+        append, stop = self.checkSquare(i,b,color)
+        if append: movesList.append([i,b])
+        if stop: break
+    #right
+    if b<7:
+      for i in range(b+1,8):
+        append, stop = self.checkSquare(a,i,color)
+        if append: movesList.append([a,i])
+        if stop: break
+    #left
+    if b>0:
+      for i in range(b-1,-1,-1):
+        append, stop = self.checkSquare(a,i,color)
+        if append: movesList.append([a,i])
+        if stop: break
+    return movesList
+    
   
   def move(self, move):
     #move piece on (a,b) to (c,d)
@@ -92,6 +176,8 @@ def main():
       move = input("Enter Next Move: ")
       valid = board.validateMove(move)
     board.move(move)
+    board.history(move)
+    print(board.history())
     print(board)
     
 main()
