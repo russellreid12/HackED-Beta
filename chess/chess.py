@@ -83,6 +83,8 @@ class Board:
       if [c,d] not in self.RookMoves(a,b,color): return False
     if selectedPiece == 'B':
       if [c,d] not in self.BishopMoves(a,b,color): return False
+    # if selectedPiece == 'P':
+    #   if [c,d] not in self.PawnMoves(a,b,color): return False
     return True
   
   def checkSquare(self,c,d,color):
@@ -94,17 +96,37 @@ class Board:
       append = True
     return append, stop
   
+  # def PawnMoves(self,a,b,color):
+  #   movesList = []
+  #   if color == 'w':
+  #     if a==1:
+  #       append, stop = self.checkSquare(3,b,color)
+  #       if append: movesList.append([3,b])
+  #     if a<7:
+  #       append, stop = self.checkSquare(a+1,b,color)
+  #       if append: movesList.append([a+1,b])
+    
+  #   if color == 'b':
+  #     if a==6:
+  #       append, stop = self.checkSquare(4,b,color)
+  #       if append: movesList.append([4,b])
+  #     if a>0:
+  #       append, stop = self.checkSquare(a-1,b,color)
+  #       if append: movesList.append([a-1,b])
+        
+  #   return movesList
+  
   def BishopMoves(self,a,b,color):
     movesList = []
     #check the 4 sightlines (a:rows,b:columns)
     #north east
-    for i in range(1,9-a):
+    for i in range(1,8-a):
       if a+i<8 and b+i<8:
         append, stop = self.checkSquare(a+i,b+i,color)
         if append: movesList.append([a+i,b+i])
         if stop: break
     #north west
-    for i in range(1,9-a):
+    for i in range(1,8-a):
       if a+i<8 and b-i>=0:
         append, stop = self.checkSquare(a+i,b-i,color)
         if append: movesList.append([a+i,b-i])
