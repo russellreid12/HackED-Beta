@@ -8,6 +8,6 @@ In the future we plan on improving this by adding a visual user interface.
 
 Running Instructions:
 To run the program, download the file chess.py and run "python3 chess.py" in the directory of the file.
-To move chess pieces, type the beginning and destination squares of the chess piece. e.g. "e2 e4" .
+To move chess pieces, enter the beginning and destination squares of the chess piece to be moved in the terminal. e.g. "e2 e4" .
 
 Credits: Victor Kwok, Russell Reid
