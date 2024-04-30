@@ -1,7 +1,7 @@
 # HackED-Beta
 Chess
 
-This program is a chess board simulation that can be run in the terminal. The purpose was to practice our python programming skills, specifically in creating a user defined class.
+This program is a chess board simulation that can be run in the terminal. The purpose was to practice our python programming skills, specifically in object oriented programming.
 We implemented move validation for the rook, bishop, and queen pieces to check for legal moves, and also to check if its the correct players turn.
 We ran out of time and did not finish implementing move validation for the king and pawn.
 In the future we plan on improving this by adding a visual user interface.
